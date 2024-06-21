@@ -1,14 +1,8 @@
-
-// routes.js
 const express = require('express');
+const { getProductById, getAllProducts } = require('../controllers/productController');
 const productRouter = express.Router();
 
-// Define your routes here
-productRouter.get('/', (req, res) => {
-    res.send('API is running...');
-});
-
-// Add more routes as needed
-// Example: router.get('/example', (req, res) => { ... });
+productRouter.get("/getproduct/:product_id",getProductById)
+productRouter.get("/getallproduct",getAllProducts)
 
 module.exports = productRouter;

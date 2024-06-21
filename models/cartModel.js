@@ -1,14 +1,27 @@
 // cartModel.js
 const mongoose = require('mongoose');
-const { productSchema } = require('./productModel');
+const { Schema } = mongoose;
 
-const cartSchema = new mongoose.Schema({
+const productSchema = new Schema({
+    product_id: {
+        type: String,
+        required: true,
+    },
+    quantity: {
+        type: Number,
+        required: true,
+    },
+});
+
+const cartSchema = new Schema({
     user_id: {
         type: String,
         required: true,
-        unique: true, // Ensure one cart per user
+        unique: true,
     },
-    products: [productSchema], // Array of product objects
+    products: [
+        productSchema 
+    ],
 });
 
 const CartModel = mongoose.model('Cart', cartSchema);

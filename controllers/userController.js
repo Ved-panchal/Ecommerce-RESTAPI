@@ -5,7 +5,6 @@ const { hashPassword  , comparePassword} = require( "../utils/passwordUtils.js")
 
 const register = async (req , res)=>{
     req.body.password = await hashPassword(req.body.password);
-    
    
     const user =await UserModel.create(req.body)
     res.status(200).json({msg : "Register Successfully" , userInfo : user})
@@ -14,8 +13,6 @@ const register = async (req , res)=>{
 
 
 const login = async (req, res) => {
-  // check if user exists
-  // check if password is correct
     try {
         const user = await UserModel.findOne({ email: req.body.email });
         if (!user) throw new Error('User is not registered');
