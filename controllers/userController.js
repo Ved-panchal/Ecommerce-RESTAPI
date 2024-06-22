@@ -1,8 +1,8 @@
-const { UserModel } = require("../models/userModel.js");
-const { createJWT } = require("../utils/tokenUtils.js");
-const { hashPassword, comparePassword } = require("../utils/passwordUtils.js");
+import UserModel  from "../models/userModel.js";
+import { createJWT } from "../utils/tokenUtils.js";
+import { hashPassword, comparePassword } from "../utils/passwordUtils.js";
 
-const register = async (req, res) => {
+export const register = async (req, res) => {
     try {
         const { email, password, ...otherDetails } = req.body;
 
@@ -21,7 +21,7 @@ const register = async (req, res) => {
     }
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await UserModel.findOne({ email });
@@ -41,5 +41,3 @@ const login = async (req, res) => {
         res.status(500).json({ msg: "Error logging in", error: error.message });
     }
 };
-
-module.exports = { login, register };

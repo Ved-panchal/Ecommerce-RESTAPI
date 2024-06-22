@@ -1,5 +1,6 @@
-const express = require('express');
-const passport = require('../config/passport');
+import express from 'express';
+import passport from '../config/passport.js';
+
 const authRouter = express.Router();
 
 authRouter.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -11,4 +12,4 @@ authRouter.get('/auth/google/callback',
     }
 );
 
-module.exports = authRouter;
+export default authRouter;

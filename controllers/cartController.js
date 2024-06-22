@@ -1,6 +1,6 @@
-const CartModel = require('../models/cartModel');
+import CartModel from '../models/cartModel.js';
 
-const addToCart = async (req, res) => {
+export const addToCart = async (req, res) => {
     const { userId } = req.params;
     const { product_id, quantity } = req.body;
 
@@ -29,7 +29,7 @@ const addToCart = async (req, res) => {
     }
 };
 
-const getCart = async (req, res) => {
+export const getCart = async (req, res) => {
     const { userId } = req.params;
 
     try {
@@ -44,7 +44,7 @@ const getCart = async (req, res) => {
     }
 };
 
-const removeFromCart = async (req, res) => {
+export const removeFromCart = async (req, res) => {
     const { userId } = req.params;
     const { product_id } = req.body;
 
@@ -71,5 +71,3 @@ const removeFromCart = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
-
-module.exports = { addToCart, getCart, removeFromCart };

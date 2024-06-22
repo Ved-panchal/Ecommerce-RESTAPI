@@ -1,22 +1,22 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const { createJWT } = require('../utils/tokenUtils');
-const User = require('../models/userModel'); 
-const dotenv = require("dotenv")
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { createJWT } from '../utils/tokenUtils.js';
+import UserModel from '../models/userModel.js';
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
 passport.use(new GoogleStrategy({
-    clientID:process.env.GOOGLE_CLIENT_ID,
+    clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/callback'
 },
 async (accessToken, refreshToken, profile, done) => {
     try {
-        let user = await User.findOne({ googleId: profile.id });
+        let user = await UserModel.findOne({ googleId: profile.id });
 
         if (!user) {
-            user = new User({
+            user = new UserModel({
                 googleId: profile.id,
                 displayName: profile.displayName,
                 email: profile.emails[0].value,
@@ -39,4 +39,4 @@ passport.deserializeUser((token, done) => {
     done(null, { token });
 });
 
-module.exports = passport;
+export default passport;

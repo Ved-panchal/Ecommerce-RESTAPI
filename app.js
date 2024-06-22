@@ -1,19 +1,18 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const passport = require('./config/passport');
-const authRouter = require('./routes/authRoutes');
-const cors = require('cors');
-const dotenv = require('dotenv');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import passport from './config/passport.js';
+import authRouter from './routes/authRoutes.js';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import connectDB from './config/database.js';
+import productRouter from './routes/productRoutes.js';
+import cartRouter from './routes/cartRoutes.js';
+import userRouter from './routes/userRoutes.js';
 
 dotenv.config();
-const connectDB = require('./config/database');
-
-const productRouter = require('./routes/productRoutes');
-const cartRouter = require('./routes/cartRoutes');
-const userRouter = require('./routes/userRoutes');
+connectDB();
 
 const app = express();
-connectDB();
 
 app.use(cors());
 app.use(express.json());
@@ -22,8 +21,8 @@ app.use(passport.initialize());
 
 app.use(authRouter);
 
-app.use("/api/v1",productRouter)
-app.use("/api/v1",cartRouter)
-app.use("/api/v1",userRouter)
+app.use("/api/v1", productRouter);
+app.use("/api/v1", cartRouter);
+app.use("/api/v1", userRouter);
 
-module.exports = app;
+export default app;
