@@ -1,9 +1,12 @@
-// cartController.js
 const CartModel = require('../models/cartModel');
 
 const addToCart = async (req, res) => {
     const { userId } = req.params;
     const { product_id, quantity } = req.body;
+
+    if (!product_id || !quantity) {
+        return res.status(400).json({ error: 'Product ID and quantity are required' });
+    }
 
     try {
         let cart = await CartModel.findOne({ user_id: userId });
@@ -21,13 +24,14 @@ const addToCart = async (req, res) => {
         await cart.save();
         res.status(200).json(cart);
     } catch (err) {
-        console.error(err);
+        console.error('Error adding to cart:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };
 
 const getCart = async (req, res) => {
     const { userId } = req.params;
+
     try {
         const cart = await CartModel.findOne({ user_id: userId });
         if (!cart) {
@@ -35,7 +39,7 @@ const getCart = async (req, res) => {
         }
         res.status(200).json(cart);
     } catch (err) {
-        console.error(err);
+        console.error('Error fetching cart:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };
@@ -43,6 +47,10 @@ const getCart = async (req, res) => {
 const removeFromCart = async (req, res) => {
     const { userId } = req.params;
     const { product_id } = req.body;
+
+    if (!product_id) {
+        return res.status(400).json({ error: 'Product ID is required' });
+    }
 
     try {
         let cart = await CartModel.findOne({ user_id: userId });
@@ -59,7 +67,7 @@ const removeFromCart = async (req, res) => {
             res.status(404).json({ error: 'Product not found in cart' });
         }
     } catch (err) {
-        console.error(err);
+        console.error('Error removing from cart:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };
