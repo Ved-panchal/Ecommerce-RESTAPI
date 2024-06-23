@@ -8,18 +8,22 @@ export const register = async (req, res) => {
 
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
-            return res.status(409).json({ msg: "User already registered with this email" });
+            return res.status(409).json({ success: false, msg: "User already registered with this email" });
         }
 
         const hashedPassword = await hashPassword(password);
         const user = await UserModel.create({ ...otherDetails, email, password: hashedPassword });
 
-        res.status(201).json({ msg: "Registered Successfully", userInfo: user });
+        const token = createJWT({ userId: user._id });
+
+        res.status(201).json({ success: true, msg: "Registered Successfully", userInfo: user, token });
     } catch (error) {
         console.error("Error during registration:", error);
-        res.status(500).json({ msg: "Error registering user", error: error.message });
+        res.status(500).json({ success: false, msg: "Error registering user", error: error.message });
     }
 };
+
+
 
 export const login = async (req, res) => {
     try {

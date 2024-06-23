@@ -13,7 +13,15 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    image: {
+    images: {
+        type: [String], // Assuming there can be multiple images
+        required: true
+    },
+    stock: {
+        type: Number,
+        required: true
+    },
+    category: {
         type: String,
         required: true
     }

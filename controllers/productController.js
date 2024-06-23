@@ -8,19 +8,21 @@ export const getProductById = async (req, res) => {
         if (!product) {
             return res.status(404).json("Not Found");
         }
-        res.status(200).json(product);
+        const transformedProduct = { id: product._id, ...product.toObject(), _id: undefined };
+        res.status(200).json(transformedProduct);
     } catch (error) {
         console.error(error);
         res.status(500).json("Server Error");
     }
-}
+};
 
 export const getAllProducts = async (req, res) => {
     try {
         let products = await ProductModel.find();
-        res.status(200).json(products);
+        const transformedProducts = products.map(product => ({ id: product._id, ...product.toObject(), _id: undefined }));
+        res.status(200).json({ products: transformedProducts });
     } catch (error) {
         console.error(error);
-        res.status(500).json("Server Error");
+        res.status(500).json({ message: "Server Error" });
     }
-}
+};
