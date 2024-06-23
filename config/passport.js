@@ -9,7 +9,8 @@ dotenv.config();
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback'
+    callbackURL: '/auth/google/callback',
+    scope: ["profile", "email"]
 },
 async (accessToken, refreshToken, profile, done) => {
     try {
@@ -18,25 +19,26 @@ async (accessToken, refreshToken, profile, done) => {
         if (!user) {
             user = new UserModel({
                 googleId: profile.id,
-                displayName: profile.displayName,
+                name: profile.displayName,
                 email: profile.emails[0].value,
             });
             await user.save();
         }
 
         const token = createJWT({ id: user._id, googleId: user.googleId });
-        return done(null, { token });
+        // Include name and id in the user object returned to done
+        return done(null, { token, id: user._id, name: user.name });
     } catch (error) {
         return done(error, false);
     }
 }));
 
 passport.serializeUser((user, done) => {
-    done(null, user.token);
+    done(null, user);
 });
 
-passport.deserializeUser((token, done) => {
-    done(null, { token });
+passport.deserializeUser((user, done) => {
+    done(null, user);
 });
 
 export default passport;
